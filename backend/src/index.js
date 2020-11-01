@@ -7,6 +7,8 @@ app.use(express.json());
 
 const projects = [];
 
+//TODO: Melhorar exemplo com deigner pattern request
+
 function logRequest(request, response, next) {
   const { method, url } = request;
 
