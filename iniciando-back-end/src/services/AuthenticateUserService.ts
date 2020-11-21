@@ -2,6 +2,7 @@ import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import authConfig from "../config/auth";
+import AppError from "../erros/AppError";
 import User from "../models/User";
 
 interface Request {
@@ -21,13 +22,13 @@ class AuthenticateUserService {
     const user = await usersRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new Error('Incorret email/password combination.');
+      throw new AppError('Incorret email/password combination.', 401);
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new Error('Incorret email/password combination.');
+      throw new AppError('Incorret email/password combination.', 401);
     }
 
     const { secret, expiresIn } = authConfig.jwt;
