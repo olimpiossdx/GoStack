@@ -1,4 +1,4 @@
-import { request, response, Router } from 'express';
+import { Router } from 'express';
 import multer from 'multer';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
