@@ -1,9 +1,8 @@
-const App = () => {
-  return (
-    <h1>
-      Texto
-    </h1>
-  )
-}
+import { BrowserRouter } from 'react-router-dom';
+import Routes from './routes';
+
+const App = () => (<BrowserRouter>
+  <Routes />
+</BrowserRouter>)
 
 export default App
