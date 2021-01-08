@@ -19,7 +19,15 @@ interface Repository {
 const Dashboard: React.FC = () => {
   const [newRepo, setNewRepo] = React.useState('');
   const [inputError, setInputError] = React.useState('');
-  const [repostories, setRepostories] = React.useState<Repository[]>([]);
+  const [repostories, setRepostories] = React.useState<Repository[]>(() => {
+    const storagegRepositories = localStorage.getItem('@GithubExplore:repositories');
+    if (storagegRepositories) {
+      return JSON.parse(storagegRepositories);
+    }
+    else {
+      return [];
+    }
+  });
 
   async function handleAddRepository(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -42,6 +50,10 @@ const Dashboard: React.FC = () => {
       setInputError('Erro na busca por esse repositório !');
     }
   }
+
+  React.useEffect(() => {
+    localStorage.setItem('@GithubExplore:repositories', JSON.stringify(repostories));
+  }, [repostories]);
 
   return (<>
     <img src={logoImg} alt='Github explore' />
