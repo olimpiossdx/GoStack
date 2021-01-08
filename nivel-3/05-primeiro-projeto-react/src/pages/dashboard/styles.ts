@@ -20,7 +20,7 @@ export const Form = styled.form<FormProps>`
 
   display:flex;
   
-  input{
+  input {
     flex:1;
     height:70px;
     padding: 0 24px;
@@ -30,7 +30,7 @@ export const Form = styled.form<FormProps>`
     border: 2px solid #FFF;
     border-right:0px;
 
-    ${(props) => props.hasError && css`border-color:#c53030`}
+    ${(props) => props.hasError && css`border-color: #c53030`}
     
     &::placeholder{
     color: #a8a8b3; 
