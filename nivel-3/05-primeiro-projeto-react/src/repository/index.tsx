@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import { Header, Issues, RepositoryInfo } from './styles';
 
-import { FiChevronLeft,FiChevronRight } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import logoImg from '../assets/logo.svg';
 
 interface RepositoryParams {
@@ -23,12 +23,12 @@ const Repository: React.FC = () => {
 
     <RepositoryInfo>
       <header>
-        <img src={logoImg} alt='Github Explore' />
+        <img src={'https://avatars0.githubusercontent.com/u/28929274?v=4"'} alt='Github Explore' />
+        <div>
+          <strong>rocketseat/unform</strong>
+          <p>descrição do repositório</p>
+        </div>
       </header>
-      <div>
-        <strong>rocketseat/unform</strong>
-        <p>descrição do repositório</p>
-      </div>
       <ul>
         <li>
           <strong>1808</strong>
@@ -46,7 +46,7 @@ const Repository: React.FC = () => {
     </RepositoryInfo>
 
     <Issues>
-      <Link  to={`asd`}>
+      <Link to={`asd`}>
         <div>
           <strong>
             repository.full_name
