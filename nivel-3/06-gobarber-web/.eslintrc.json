@@ -25,24 +25,28 @@
   "plugins": [
     "react",
     "react-hooks",
-    "prettier",
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "prettier"
   ],
   "rules": {
     "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [
       1,
       {
         "extensions": [
-          ".tsx"
+          ".tsx",
+          ".jsx"
         ]
       }
     ],
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
+    "no-use-before-define": "off",
     "import/prefer-default-export": "off",
-    "camelcase": "off",
-    "@typescript-eslint/ban-types": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
