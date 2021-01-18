@@ -59,8 +59,7 @@ export const Content = styled.div`
         color: ${shade(0.2, '#f4ede8')};
       }
     }
-  }
-`;
+  }`;
 
 export const Background = styled.div`
   flex: 1;
