@@ -9,6 +9,8 @@ interface ContainerProps {
 }
 
 export const Container = styled.div<ContainerProps>`
+  display: flex;
+  justify-content: space-between;
   background: #232129;
   border-radius: 10px;
   padding: 16px;
