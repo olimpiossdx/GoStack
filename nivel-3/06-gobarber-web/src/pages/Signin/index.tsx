@@ -11,6 +11,7 @@ import Button from '../../components/Button';
 import logoImg from '../../assets/logo.svg';
 import getValidationErros from '../../utils/getValidationErros';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const SignIn = () => {
   const formRef = useRef<FormHandles>(null);
 
@@ -26,6 +27,7 @@ const SignIn = () => {
       });
       await schema.validate(data, { abortEarly: false });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
       const errors = getValidationErros(error);
       formRef.current?.setErrors(errors);
