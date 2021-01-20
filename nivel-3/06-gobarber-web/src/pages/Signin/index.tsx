@@ -1,4 +1,4 @@
-import { useRef, useCallback, useContext } from 'react';
+import { useRef, useCallback } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import * as Yup from 'yup';
 
@@ -11,7 +11,7 @@ import Button from '../../components/Button';
 import logoImg from '../../assets/logo.svg';
 import getValidationErros from '../../utils/getValidationErros';
 
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 interface SignInFormData {
   email: string;
@@ -21,8 +21,7 @@ interface SignInFormData {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const SignIn = () => {
   const formRef = useRef<FormHandles>(null);
-  const { singIn, user } = useContext(AuthContext);
-  console.log('user', user);
+  const { singIn } = useAuth();
 
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
