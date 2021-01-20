@@ -58,12 +58,12 @@ const AuthProvider: React.FC = ({ children }) => {
 };
 
 function useAuth(): AuthContextData {
-  const conext = useContext(AuthContext);
+  const context = useContext(AuthContext);
 
-  if (!conext) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  return conext;
+  return context;
 }
 
 export { AuthProvider, useAuth };
