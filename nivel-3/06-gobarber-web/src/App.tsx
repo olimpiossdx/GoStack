@@ -2,13 +2,13 @@ import GlobalStyles from './styles/globa';
 import SignIn from './pages/Signin';
 import SignUP from './pages/SignUP';
 
-import AuthContext from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 
 const App: React.FC = () => (
   <>
-    <AuthContext.Provider value={{ name: 'Olimpio' }}>
+    <AuthProvider>
       <SignIn />
-    </AuthContext.Provider>
+    </AuthProvider>
     <GlobalStyles />
   </>
 );

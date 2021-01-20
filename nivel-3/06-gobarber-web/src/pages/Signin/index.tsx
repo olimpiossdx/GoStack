@@ -11,32 +11,41 @@ import Button from '../../components/Button';
 import logoImg from '../../assets/logo.svg';
 import getValidationErros from '../../utils/getValidationErros';
 
-import AuthContext from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
+
+interface SignInFormData {
+  email: string;
+  password: string;
+}
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const SignIn = () => {
   const formRef = useRef<FormHandles>(null);
-  const auth = useContext(AuthContext);
-  console.log('auth', auth);
+  const { singIn } = useContext(AuthContext);
 
-  const handleSubmit = useCallback(async (data: any) => {
-    try {
-      formRef.current?.setErrors({});
+  const handleSubmit = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('Digite um email valido'),
-        password: Yup.string().min(6, 'No mínimo 6 dígitos'),
-      });
-      await schema.validate(data, { abortEarly: false });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-      const errors = getValidationErros(error);
-      formRef.current?.setErrors(errors);
-    }
-  }, []);
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um email valido'),
+          password: Yup.string().min(6, 'No mínimo 6 dígitos'),
+        });
+        await schema.validate(data, { abortEarly: false });
+
+        singIn({ email: data.email, password: data.password });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+        const errors = getValidationErros(error);
+        formRef.current?.setErrors(errors);
+      }
+    },
+    [singIn],
+  );
 
   return (
     <Container>
