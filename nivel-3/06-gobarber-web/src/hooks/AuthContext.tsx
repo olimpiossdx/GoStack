@@ -14,6 +14,7 @@ interface SignInCredenials {
 interface AuthContextData {
   user: object;
   singIn(credentials: SignInCredenials): Promise<void>;
+  signOut(): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -40,8 +41,17 @@ const AuthProvider: React.FC = ({ children }) => {
     setData({ token, user });
   }, []);
 
+  const signOut = () =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useCallback(() => {
+      localStorage.removeItem('@GoBarber:token');
+      localStorage.removeItem('@GoBarber:user');
+
+      setData({} as AuthState);
+    }, []);
+
   return (
-    <AuthContext.Provider value={{ user: data.user, singIn }}>
+    <AuthContext.Provider value={{ user: data.user, singIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
