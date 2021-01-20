@@ -21,7 +21,8 @@ interface SignInFormData {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const SignIn = () => {
   const formRef = useRef<FormHandles>(null);
-  const { singIn } = useContext(AuthContext);
+  const { singIn, user } = useContext(AuthContext);
+  console.log('user', user);
 
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
