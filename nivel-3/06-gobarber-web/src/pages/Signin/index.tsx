@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useContext } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import * as Yup from 'yup';
 
@@ -11,9 +11,13 @@ import Button from '../../components/Button';
 import logoImg from '../../assets/logo.svg';
 import getValidationErros from '../../utils/getValidationErros';
 
+import AuthContext from '../../context/AuthContext';
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const SignIn = () => {
   const formRef = useRef<FormHandles>(null);
+  const auth = useContext(AuthContext);
+  console.log('auth', auth);
 
   const handleSubmit = useCallback(async (data: any) => {
     try {
