@@ -20,7 +20,8 @@ export const Content = styled.div`
   width: 100%;
   max-width: 700px;
 
-  }`;
+  }
+`;
 
 const appearFromRight = keyframes`
  from {

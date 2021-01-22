@@ -3,7 +3,7 @@ import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import * as Yup from 'yup';
 
 import { Form } from '@unform/web';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Container, Content, Background, AnimationContainer } from './styles';
 import Input from '../../components/Input';
@@ -26,6 +26,8 @@ const SignIn = () => {
   const { singIn } = useAuth();
   const { addToast } = useToast();
 
+  const history = useHistory();
+
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
       try {
@@ -37,9 +39,11 @@ const SignIn = () => {
             .email('Digite um email valido'),
           password: Yup.string().min(6, 'No mínimo 6 dígitos'),
         });
+
         await schema.validate(data, { abortEarly: false });
 
         await singIn({ email: data.email, password: data.password });
+        history.push('/');
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErros(error);
@@ -54,7 +58,7 @@ const SignIn = () => {
         });
       }
     },
-    [singIn, addToast],
+    [singIn, addToast, history],
   );
 
   return (
