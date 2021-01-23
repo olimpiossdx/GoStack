@@ -6,8 +6,10 @@ import { Container, Title, ForgotPassword, ForgotPasswordText, CreateAccountButt
 import logoImg from '../../assets/logo.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import { useNavigation } from '@react-navigation/native';
 
 const SignIn = () => {
+  const navigation = useNavigation();
   return (<>
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -31,7 +33,7 @@ const SignIn = () => {
     </ KeyboardAvoidingView>
     <CreateAccountButton>
       <Icon name='log-in' size={20} color="#ff9000" />
-      <CreateAccountButtonText onPress={() => { console.log('criar conta') }}>
+      <CreateAccountButtonText onPress={() => navigation.navigate('SignUp')}>
         Criar conta
       </CreateAccountButtonText>
     </CreateAccountButton>
