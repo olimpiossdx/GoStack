@@ -3,8 +3,5 @@ module.exports = {
     ios: {},
     android: {},
   },
-  assets: [
-    './assets/fonts/RobotoSlab-Medium',
-    './assets/fonts/RobotoSlab-Regular'
-],
+  assets: ['./assets/fonts/'],
 };
