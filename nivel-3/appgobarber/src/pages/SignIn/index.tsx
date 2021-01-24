@@ -5,13 +5,13 @@ import Icon from 'react-native-vector-icons/Feather';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
-
 import { Container, Title, ForgotPassword, ForgotPasswordText, CreateAccountButton, CreateAccountButtonText } from './styles';
 import logoImg from '../../assets/logo.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { FormHelpers } from '@unform/core';
 import getValidationErros from '../../utils/getValidationErros';
+import { useAuth } from '../../hooks/auth';
 
 interface SignInFormData {
   email: string;
@@ -20,13 +20,9 @@ interface SignInFormData {
 
 const SignIn = () => {
   const formRef = useRef<FormHandles>(null);
+  const { singIn } = useAuth();
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
-
-  // const handleSignIn = useCallback((data: FormProps, helpers: FormHelpers, event?: FormEvent) => {
-  //   console.log('data', data);
-  // }, []);
-
 
   const handleSignIn = useCallback(
     async (data: SignInFormData, _helpers: FormHelpers, _event?: FormEvent) => {
@@ -42,7 +38,7 @@ const SignIn = () => {
 
         await schema.validate(data, { abortEarly: false });
 
-        // await singIn({ email: data.email, password: data.password });
+        await singIn({ email: data.email, password: data.password });
 
         // navigation.navigate('/Menu');
       } catch (error) {
@@ -54,9 +50,7 @@ const SignIn = () => {
 
         Alert.alert('Erro na autenticação !', 'Ocorreu um erro ao fazer login, cheque as credenciais');
       }
-    },
-    [],
-  );
+    }, [singIn]);
 
   return (<>
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS == 'ios' ? 'padding' : undefined}>

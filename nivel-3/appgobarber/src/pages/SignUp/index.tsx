@@ -58,7 +58,7 @@ const SignUp = () => {
         }
         Alert.alert('Erro no cadastro !', 'Ocorreu um erro ao fazer cadastro, tente novamente');
       }
-    }, []);
+    }, [navigation]);
 
   return (<>
     <KeyboardAvoidingView
