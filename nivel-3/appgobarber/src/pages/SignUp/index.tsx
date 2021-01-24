@@ -40,10 +40,12 @@ const SignUp = () => {
         });
         await schema.validate(data, { abortEarly: false });
 
-        // await api.post('/users', data);
-        // navigation.navigate('/');
+        await api.post('/users', data);
 
-        Alert.alert('Cadastro realizado com sucesso!', 'Você ja pode fazer seu logon no GoBarber');
+        Alert.alert('Cadastro realizado com sucesso!', 'Você ja pode fazer seu login no GoBarber');
+
+        navigation.goBack();
+
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErros(error);
