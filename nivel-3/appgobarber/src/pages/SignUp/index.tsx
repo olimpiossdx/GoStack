@@ -1,7 +1,10 @@
 import React, { FormEvent, useCallback, useRef } from 'react';
-import { Image, KeyboardAvoidingView, ScrollView, Platform, View, TextInput } from 'react-native';
+import { Image, KeyboardAvoidingView, ScrollView, Platform, View, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Container, Title, BackToSignIn, BackToSignInText } from './styles';
+
+import * as Yup from 'yup';
+import api from '../../services/api';
 
 import logoImg from '../../assets/logo.png';
 import Input from '../../components/Input';
@@ -9,21 +12,51 @@ import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles, FormHelpers, FormProps, FormProvider } from '@unform/core';
+import getValidationErros from '../../utils/getValidationErros';
 
-interface SignUpProps {
+interface SignUpFormData {
   user: string;
   email: string;
   password: string;
-}
+};
+
 const SignUp = () => {
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const emailInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
-  const handleSignUP = useCallback((data: SignUpProps, helpers: FormHelpers, event?: FormEvent) => {
-    console.log('data', data);
-  }, []);
+  const handleSignUP = useCallback(
+    async (data: SignUpFormData, _helpers: FormHelpers, _event?: FormEvent) => {
+      try {
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome obrigatório'),
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um e-mail válido.'),
+          password: Yup.string().required('Senha obrigatória.'),
+        });
+        await schema.validate(data, { abortEarly: false });
+
+        // await api.post('/users', data);
+        // navigation.navigate('/');
+
+        Alert.alert('Cadastro realizado com sucesso!', 'Você ja pode fazer seu logon no GoBarber');
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErros(error);
+          formRef.current?.setErrors(errors);
+          return;
+        }
+        if (error.response.data) {
+          Alert.alert('Erro no cadastro !', error.response.data.message); ''
+          return;
+        }
+        Alert.alert('Erro no cadastro !', 'Ocorreu um erro ao fazer cadastro, tente novamente');
+      }
+    }, []);
 
   return (<>
     <KeyboardAvoidingView
