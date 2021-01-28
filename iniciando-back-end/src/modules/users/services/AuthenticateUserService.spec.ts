@@ -21,7 +21,7 @@ describe('AuthenticateUser', () => {
 
   });
 
-  it('should not be able to create tow appointments on the same time', async () => {
+  it('should not be able to create two appointments on the same time', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
     const fakeHashProvider = new FakeHashProvider();
 
@@ -30,6 +30,30 @@ describe('AuthenticateUser', () => {
     const user = await createUser.execute({ name: 'John Doe', email: 'johndoe@example.com', password: '54326587' });
 
     expect(createUser.execute({ name: 'John Doe', email: 'johndoe@example.com', password: '54326587' })).rejects.toBeInstanceOf(AppError);
+
+  });
+
+
+  it('should not be able to authenticate with non existing user', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeHashProvider = new FakeHashProvider();
+
+    const authenticate = new AuthenticateUserService(fakeUsersRepository, fakeHashProvider);
+
+    expect(authenticate.execute({ email: 'johndoe@example.com', password: '54326587' })).rejects.toBeInstanceOf(AppError);
+
+  });
+
+  it('should be able to authenticate with wrong password', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeHashProvider = new FakeHashProvider();
+
+    const createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+    const authenticate = new AuthenticateUserService(fakeUsersRepository, fakeHashProvider);
+
+    const user = await createUser.execute({ name: 'John Doe', email: 'johndoe@example.com', password: '54326587' });
+
+    expect(authenticate.execute({ email: 'johndoe@example.com', password: 'wrong-password' })).rejects.toBeInstanceOf(AppError);
 
   });
 
