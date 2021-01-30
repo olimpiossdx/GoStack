@@ -1,8 +1,6 @@
 import FakeDikStorageProvider from "@shared/container/providers/StorageProvider/fakes/FakeStorageProvider";
 import AppError from "@shared/erros/AppError";
-import FakeHashProvider from "../providers/fakes/FakeHashProvider";
 import FakeUsersRepository from "../repositories/fakes/FakeUsersRepository";
-import CreateUserService from "./CreateUserService";
 import UpdateUserAvatarService from "./UpdateUserAvatarService";
 
 let fakeUsersRepository: FakeUsersRepository;
