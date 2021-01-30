@@ -43,5 +43,4 @@ describe('SendForgotPassworEmail', () => {
 
     expect(generationToken).toHaveBeenCalledWith(user.id);
   });
-
 });

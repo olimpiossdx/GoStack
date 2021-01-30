@@ -41,6 +41,7 @@ describe('ResetPasswordService', () => {
 
   it('should not ble able to reset the password with non-existing user', async () => {
     const { token } = await fakeUserTokensRepository.generate('non-existing-user');
+
     await expect(resetPasswordService.execute({ token: token, password: '123456' })).rejects.toBeInstanceOf(AppError);
   });
 
@@ -54,8 +55,6 @@ describe('ResetPasswordService', () => {
     });
 
     await expect(resetPasswordService.execute({ token: token, password: '123456' })).rejects.toBeInstanceOf(AppError);
-
   });
-
 });
 
