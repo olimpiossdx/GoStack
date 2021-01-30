@@ -1,4 +1,4 @@
-import { inject, injectable } from "tsyringe";
+import { inject, injectable, singleton } from "tsyringe";
 
 import AppError from "@shared/erros/AppError";
 import IUsersRepository from "../repositories/IUserRepository";
@@ -9,10 +9,10 @@ interface IRequest {
   email: string;
 };
 
-@injectable()
+@singleton()
 class SendForgotPasswordEmailService {
   constructor(
-    @inject('UserRepository')
+    @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
     @inject('MailProvider')
@@ -28,9 +28,9 @@ class SendForgotPasswordEmailService {
       throw new AppError('User does not exists.');
     }
 
-    await this.userTokensRepository.generate(user.id);
+    const { token } = await this.userTokensRepository.generate(user.id);
 
-    this.mailProvider.sendMail(email, 'envio de email recebido');
+    await this.mailProvider.sendMail(email, `envio de email recebido ${token}`);
   }
 };
 
