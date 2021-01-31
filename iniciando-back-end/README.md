@@ -55,13 +55,12 @@
 **RNF**
 - A listagem de prestadores deve ser armazenada em cache;
 
-
 **RN**
-- Cada agendamento deve durar 1 hora exatamente;
 - Os agendamentos devem estar disponíveis entre as 8h até as 18h (Primeiro às 8h, o último as 17h);
-- O usuário não pode agendar em um horário já ocupado;
 - O usuário não pode agendar em um horário que ja passou;
 - O usuário não pode agendar serviços consigo mesmo;
+- Cada agendamento deve durar 1 hora exatamente;
+- O usuário não pode agendar em um horário já ocupado;
 
 <p align='center'>
   <img alt='GitHub language count' src='https://img.shields.io/github/languages/count/olimpiossdx/GoStack'>
