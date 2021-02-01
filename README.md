@@ -11,7 +11,7 @@
     <img alt='GitHub last commit' src='https://img.shields.io/github/last-commit/olimpiossdx/GoStack'>
   </a>
 
-  <a href='https://github.com/olimpiossdx/omniStack/10_semana/issues'>
+  <a href='https://github.com/olimpiossdx/omniStack/GoStack/issues'>
     <img alt='Repository issues' src='https://img.shields.io/github/issues/olimpiossdx/GoStack'>
   </a>
 
