@@ -9,7 +9,7 @@ class NotificationsRepository implements INotificationRepository {
   private ormRepositoy: MongoRepository<Notification>;
 
   constructor() {
-    this.ormRepositoy = getMongoRepository(Notification,'mongo');
+    this.ormRepositoy = getMongoRepository(Notification, 'mongo');
   }
 
   public async crete({ content, recipient_id }: ICreateNotificationDTO): Promise<Notification> {
