@@ -17,7 +17,7 @@ class ListProviderAppointmentsService {
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
     @inject('CacheProvider')
-    private cacheProvider: ICacheProvider) { }
+    private cacheProvider: ICacheProvider<Appointment[]>) { }
 
 
   public async execute({ provider_id, day, month, year }: IRequest): Promise<Appointment[]> {
