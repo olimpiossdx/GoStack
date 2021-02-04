@@ -1,12 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import AppError from '@shared/erros/AppError';
-
-import IUsersRepository from '@modules/users/repositories/IUserRepository';
-import User from "@modules/users/infra/typeorm/entities/User";
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 import { getDate, getDaysInMonth } from 'date-fns';
-
 
 interface IRequest {
   provider_id: string;

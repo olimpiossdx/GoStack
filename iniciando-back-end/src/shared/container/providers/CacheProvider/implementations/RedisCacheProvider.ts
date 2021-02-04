@@ -11,7 +11,7 @@ class RedisCacheProvider implements ICacheProvider {
     this.client = new Redis(cacheConfig.config.redis);
   }
 
-  public async save(key: string, value: T | T[]): Promise<void> {
+  public async save(key: string, value: any): Promise<void> {
     this.client.set(key, JSON.stringify(value));
   }
 
@@ -36,7 +36,7 @@ class RedisCacheProvider implements ICacheProvider {
 
     const pipeline = this.client.pipeline();
 
-    keys.forEach(key =>{
+    keys.forEach(key => {
       pipeline.del(key);
     });
 
