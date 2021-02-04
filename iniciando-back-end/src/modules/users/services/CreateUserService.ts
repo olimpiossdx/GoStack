@@ -5,6 +5,7 @@ import AppError from "@shared/erros/AppError";
 import User from "../infra/typeorm/entities/User";
 import IUsersRepository from "../repositories/IUserRepository";
 import IHashProvider from "../providers/models/IHashProvider";
+import ICacheProvider from "@shared/container/providers/CacheProvider/models/ICacheProvider";
 
 interface IRequest {
   name: string;
@@ -19,7 +20,9 @@ class CreateUserService {
     private usersRepository: IUsersRepository,
 
     @inject('HashProvider')
-    private hashProvider: IHashProvider) { }
+    private hashProvider: IHashProvider,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider<User>) { }
 
   public async execute({ name, email, password }: IRequest): Promise<User> {
     const checkUserExists = await this.usersRepository.findByEmail(email);
@@ -32,7 +35,7 @@ class CreateUserService {
 
     const user = await this.usersRepository.create({ name, email, password: hashedPassword });
 
-    // delete user.password;
+    await this.cacheProvider.invalidatePrefix('providers-list');
 
     return user;
   }
