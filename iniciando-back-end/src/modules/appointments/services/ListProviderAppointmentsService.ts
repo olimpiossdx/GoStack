@@ -16,12 +16,20 @@ class ListProviderAppointmentsService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider<Appointment[]>) { }
 
 
   public async execute({ provider_id, day, month, year }: IRequest): Promise<Appointment[]> {
-    const appointments = await this.appointmentsRepository.findAllInDayFromProvider({ provider_id, day, month, year });
+    const cachekey = `providers-appointments:${provider_id}:${year}:${month}:${day}`;
+
+    let appointments = await this.cacheProvider.recover<Appointment[]>(cachekey);
+
+    if (!appointments) {
+      appointments = await this.appointmentsRepository.findAllInDayFromProvider({ provider_id, day, month, year });
+      await this.cacheProvider.save(cachekey, appointments);
+    }
 
     return appointments;
   }
