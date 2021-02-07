@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiClock, FiPower } from 'react-icons/fi';
 import {
+  Appointment,
   Calendar,
   Container,
   Content,
@@ -9,6 +10,7 @@ import {
   NextAppointment,
   Profile,
   Schedule,
+  Section,
 } from './styles';
 
 // eslint-disable-next-line import/no-unresolved
@@ -17,6 +19,8 @@ import { useAuth } from '../../hooks/auth';
 
 const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   return (
     <Container>
       <Header>
@@ -58,6 +62,41 @@ const Dashboard: React.FC = () => {
               </span>
             </div>
           </NextAppointment>
+
+          <Section>
+            <strong>Manhã</strong>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+              <div>
+                <img
+                  src="https://avatars.githubusercontent.com/u/30667729?s=460&u=e5e7f27ae6315a30400120e97b64a61ea4cc83fc&v=4"
+                  alt="OLimpio pimenta"
+                />
+                <strong>Olimpio Pimenta</strong>
+              </div>
+            </Appointment>
+          </Section>
+
+          <Section>
+            <strong>Tarde</strong>
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+              <div>
+                <img
+                  src="https://avatars.githubusercontent.com/u/30667729?s=460&u=e5e7f27ae6315a30400120e97b64a61ea4cc83fc&v=4"
+                  alt="OLimpio pimenta"
+                />
+                <strong>Olimpio Pimenta</strong>
+              </div>
+            </Appointment>
+          </Section>
         </Schedule>
         <Calendar />
       </Content>
