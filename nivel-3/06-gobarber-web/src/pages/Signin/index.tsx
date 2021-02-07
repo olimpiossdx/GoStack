@@ -23,7 +23,7 @@ interface SignInFormData {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const SignIn = () => {
   const formRef = useRef<FormHandles>(null);
-  const { singIn } = useAuth();
+  const { signIn } = useAuth();
   const { addToast } = useToast();
 
   const history = useHistory();
@@ -42,7 +42,7 @@ const SignIn = () => {
 
         await schema.validate(data, { abortEarly: false });
 
-        await singIn({ email: data.email, password: data.password });
+        await signIn({ email: data.email, password: data.password });
         history.push('/');
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -58,7 +58,7 @@ const SignIn = () => {
         });
       }
     },
-    [singIn, addToast, history],
+    [signIn, addToast, history],
   );
 
   return (

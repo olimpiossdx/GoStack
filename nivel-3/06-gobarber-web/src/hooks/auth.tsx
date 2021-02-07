@@ -1,19 +1,28 @@
-import React, { useContext, createContext, useCallback, useState } from 'react';
+/* eslint-disable camelcase */
+
+import React, { createContext, useCallback, useContext, useState } from 'react';
+
 import api from '../services/api';
+
+interface User {
+  id: string;
+  name: string;
+  avatar_url: string;
+}
 
 interface AuthState {
   token: string;
-  user: object;
+  user: User;
 }
 
-interface SignInCredenials {
+interface SignInCredentials {
   email: string;
   password: string;
 }
 
 interface AuthContextData {
-  user: object;
-  singIn(credentials: SignInCredenials): Promise<void>;
+  user: User;
+  signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
 }
 
@@ -23,6 +32,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@GoBarber:token');
     const user = localStorage.getItem('@GoBarber:user');
+
     if (token && user) {
       return { token, user: JSON.parse(user) };
     }
@@ -30,8 +40,11 @@ const AuthProvider: React.FC = ({ children }) => {
     return {} as AuthState;
   });
 
-  const singIn = useCallback(async ({ email, password }) => {
-    const response = await api.post('sessions', { email, password });
+  const signIn = useCallback(async ({ email, password }) => {
+    const response = await api.post('sessions', {
+      email,
+      password,
+    });
 
     const { token, user } = response.data;
 
@@ -41,17 +54,15 @@ const AuthProvider: React.FC = ({ children }) => {
     setData({ token, user });
   }, []);
 
-  const signOut = () =>
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useCallback(() => {
-      localStorage.removeItem('@GoBarber:token');
-      localStorage.removeItem('@GoBarber:user');
+  const signOut = useCallback(() => {
+    localStorage.removeItem('@GoBarber:token');
+    localStorage.removeItem('@GoBarber:user');
 
-      setData({} as AuthState);
-    }, []);
+    setData({} as AuthState);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user: data.user, singIn, signOut }}>
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
@@ -63,6 +74,7 @@ function useAuth(): AuthContextData {
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
+
   return context;
 }
 
