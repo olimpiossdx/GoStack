@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 import { useRef, useCallback } from 'react';
-import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
+import { FiLock } from 'react-icons/fi';
 import * as Yup from 'yup';
 
 import { Form } from '@unform/web';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Container, Content, Background, AnimationContainer } from './styles';
 import Input from '../../components/Input';
@@ -13,8 +13,8 @@ import Button from '../../components/Button';
 import logoImg from '../../assets/logo.svg';
 import getValidationErros from '../../utils/getValidationErros';
 
-import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
+import api from '../../services/api';
 
 interface ResetPasswordFormData {
   password: string;
@@ -24,10 +24,11 @@ interface ResetPasswordFormData {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const ResetPassword = () => {
   const formRef = useRef<FormHandles>(null);
-  const { singIn } = useAuth();
+
   const { addToast } = useToast();
 
   const history = useHistory();
+  const location = useLocation();
 
   const handleSubmit = useCallback(
     async (data: ResetPasswordFormData) => {
@@ -43,8 +44,19 @@ const ResetPassword = () => {
         });
 
         await schema.validate(data, { abortEarly: false });
+        const token = location.search.replace('?token=', '');
 
-        history.push('/signin');
+        if (!token) {
+          throw new Error();
+        }
+
+        await api.post('/password/reset', {
+          password: data.password,
+          password_confirmation: data.password_confirmation,
+          token,
+        });
+
+        history.push('/');
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErros(error);
@@ -59,7 +71,7 @@ const ResetPassword = () => {
         });
       }
     },
-    [addToast, history],
+    [addToast, history, location],
   );
 
   return (
