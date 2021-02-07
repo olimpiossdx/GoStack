@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { FiLogIn, FiMail } from 'react-icons/fi';
 import * as Yup from 'yup';
 
@@ -13,6 +13,7 @@ import logoImg from '../../assets/logo.svg';
 import getValidationErros from '../../utils/getValidationErros';
 
 import { useToast } from '../../hooks/toast';
+import api from '../../services/api';
 
 interface ForgotPaswordFormData {
   email: string;
@@ -22,9 +23,11 @@ interface ForgotPaswordFormData {
 const ForgotPassword = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = useCallback(
     async (data: ForgotPaswordFormData) => {
+      setLoading(true);
       try {
         formRef.current?.setErrors({});
 
@@ -35,6 +38,14 @@ const ForgotPassword = () => {
         });
 
         await schema.validate(data, { abortEarly: false });
+        await api.post('/password/forgot', { email: data.email });
+
+        addToast({
+          type: 'success',
+          title: 'E-mail de recuperação enviado',
+          description:
+            'Enviamos um e-mail para confirmar a recuperação de senha, cheque sua caixa de entrada ',
+        });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErros(error);
@@ -48,6 +59,8 @@ const ForgotPassword = () => {
           description:
             'Ocorreu um erro ao tentar realizar a recuperação de senhan, tente novamente',
         });
+      } finally {
+        setLoading(false);
       }
     },
     [addToast],
@@ -62,7 +75,9 @@ const ForgotPassword = () => {
             <h1>Recuperar senha</h1>
 
             <Input name="email" icon={FiMail} placeholder="E-mail" />
-            <Button type="submit">Recuperar</Button>
+            <Button type="submit" loading={loading}>
+              Recuperar
+            </Button>
           </Form>
           <Link to="/signup">
             <FiLogIn />
