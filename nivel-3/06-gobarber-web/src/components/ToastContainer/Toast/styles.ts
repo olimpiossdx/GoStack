@@ -63,11 +63,12 @@ export const Container = styled(animated.div)<ContainerProps>`
   }
 
   ${props =>
-    !props.hasDescritpion &&
-    css`
-      align-items: center;
-      svg {
-        margin-top: 0;
-      }
-    `}
+    props.hasDescritpion
+      ? css`
+          align-items: center;
+          svg {
+            margin-top: 0;
+          }
+        `
+      : null}
 `;
