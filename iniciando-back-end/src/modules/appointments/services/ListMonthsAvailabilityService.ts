@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
-import { getDate, getDaysInMonth } from 'date-fns';
+import { getDate, getDaysInMonth, isAfter } from 'date-fns';
 
 interface IRequest {
   provider_id: string;
@@ -33,9 +33,11 @@ class ListProvidersMonthsAvailabilityService {
         return getDate(appointment.date) === day;
       });
 
+      const commpareDate = new Date(year, month - 1, day, 23, 59, 59);
+
       return {
         day,
-        available: appointmentsInDay.length < 10,
+        available: appointmentsInDay.length < 10 && isAfter(commpareDate, new Date()),
       };
     });
 
