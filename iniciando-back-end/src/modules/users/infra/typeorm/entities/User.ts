@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 
 import { Exclude, Expose } from 'class-transformer';
 import uploadConfig from '@config/upload';
+
 @Entity('users')
 class User {
   @PrimaryGeneratedColumn('uuid')
