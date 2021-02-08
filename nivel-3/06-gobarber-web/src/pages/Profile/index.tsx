@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { useCallback, useRef } from 'react';
 import { FiMail, FiLock, FiUser, FiCamera, FiArrowLeft } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
@@ -15,7 +16,9 @@ import { useAuth } from '../../hooks/auth';
 interface ProfileFormData {
   name: string;
   email: string;
+  old_password: string;
   password: string;
+  password_confirmation: string;
 }
 
 const Profile = () => {
@@ -51,17 +54,51 @@ const Profile = () => {
           email: Yup.string()
             .required('E-mail obrigatório')
             .email('Digite um e-mail válido.'),
-          password: Yup.string().required('Senha obrigatória.'),
+          old_password: Yup.string(),
+          password: Yup.string().when('old_password', {
+            is: (val: string) => !!val.length,
+            then: Yup.string().required('Campo obrigatório'),
+            otherwise: Yup.string(),
+          }),
+          password_confirmation: Yup.string()
+            .when('old_password', {
+              is: (val: string) => !!val.length,
+              then: Yup.string().required('Campo obrigatório'),
+              otherwise: Yup.string(),
+            })
+            .oneOf([Yup.ref('password'), null], 'Confirmação incorreta.'),
         });
-        await schema.validate(data, { abortEarly: false });
-        await api.post('/users', data);
 
-        history.push('/');
+        await schema.validate(data, { abortEarly: false });
+
+        const {
+          name,
+          email,
+          old_password,
+          password,
+          password_confirmation,
+        } = data;
+        const formData = {
+          name,
+          email,
+          ...(data.old_password
+            ? {
+                old_password,
+                password,
+                password_confirmation,
+              }
+            : {}),
+        };
+
+        const response = await api.put('/profile', formData);
+        updateUser(response.data);
+
+        history.push('/dashboard');
 
         addToast({
           type: 'success',
-          title: 'Cadastro realizado com sucesso!',
-          description: 'Você ja pode fazer seu logon no GoBarber',
+          title: 'Perfil atualizado realizado com sucesso!',
+          description: 'Suas informações foram atualizadas com sucesso!',
         });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -79,12 +116,12 @@ const Profile = () => {
         }
         addToast({
           type: 'error',
-          title: 'Erro no cadastro !',
-          description: 'Ocorreu um erro ao fazer cadastro, tente novamente',
+          title: 'Erro na atualização !',
+          description: 'Ocorreu um erro ao atualizar perfil, tente novamente.',
         });
       }
     },
-    [history, addToast],
+    [updateUser, history, addToast],
   );
 
   return (
