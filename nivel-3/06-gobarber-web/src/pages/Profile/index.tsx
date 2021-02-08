@@ -38,7 +38,7 @@ const Profile = () => {
         });
       }
     },
-    [addToast],
+    [addToast, updateUser],
   );
 
   const handleSubmit = useCallback(
