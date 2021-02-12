@@ -9,22 +9,33 @@ import {
   ProvidersListContainer, ProvidersList, ProviderContainer,
   ProviderAvatar, ProviderName, Calendar, Title, OpenDatePickerButton, OpenDatePickerButtonText
 } from './styles';
-import { Provider } from '../Dashboard';
+
 import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import { Platform } from 'react-native';
+import { date } from 'yup/lib/locale';
 
 interface RouteParms {
   providerId: string;
 }
 
+interface Provider {
+  id: string;
+  name: string;
+  avatar_url: string;
+}
 
+interface IAvailabiltyItem {
+  hour: string;
+  available: boolean;
+}
 const CreateAppointment = () => {
   const { user } = useAuth();
   const route = useRoute();
   const { goBack } = useNavigation();
   const routeParams = route.params as RouteParms;
 
+  const [availability, setAvailability] = useState<IAvailabiltyItem[]>([]);
   const [providers, setproviders] = useState<Provider[]>([])
   const [selectedProvider, setSelectedProvider] = useState(routeParams.providerId);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -35,7 +46,20 @@ const CreateAppointment = () => {
     api.get('providers').then(response => {
       setproviders(response.data);
     })
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    api.get(`/providers/${selectedProvider}/day-availability`, {
+      params: {
+        year: selectedDate.getFullYear(),
+        month: selectedDate.getMonth() + 1,
+        day: selectedDate.getDate()
+      }
+    }).then(response => {
+      setAvailability(response.data);
+    })
+  }, [selectedDate, selectedProvider]);
+
 
   const navigateBack = useCallback(() => {
     goBack()

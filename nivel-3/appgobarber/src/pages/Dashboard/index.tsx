@@ -9,7 +9,7 @@ import {
 } from './styles';
 import api from '../../services/api';
 
-export interface Provider {
+interface Provider {
   id: string;
   name: string;
   avatar_url: string;
