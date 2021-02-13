@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -14,6 +14,7 @@ import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import { Platform } from 'react-native';
 import { date } from 'yup/lib/locale';
+import { format } from 'date-fns';
 
 interface RouteParms {
   providerId: string;
@@ -26,7 +27,7 @@ interface Provider {
 }
 
 interface IAvailabiltyItem {
-  hour: string;
+  hour: number;
   available: boolean;
 }
 const CreateAppointment = () => {
@@ -80,9 +81,27 @@ const CreateAppointment = () => {
     if (date) {
       setSelectedDate(date);
     }
-
   }, []);
 
+  const morningAvailability = useMemo(() => {
+    return availability.filter(({ hour }) => hour < 12)
+      .map(({ available, hour }) =>
+      ({
+        hour,
+        available,
+        hourFormatted: format(new Date().setHours(hour), 'HH:00')
+      }));
+  }, [availability]);
+
+  const afternoonAvailability = useMemo(() => {
+    return availability.filter(({ hour }) => hour >= 12)
+      .map(({ available, hour }) =>
+      ({
+        hour,
+        available,
+        hourFormatted: format(new Date().setHours(hour), 'HH:00')
+      }));
+  }, [availability]);
 
   return (
     <Container>
@@ -110,20 +129,24 @@ const CreateAppointment = () => {
 
       <Calendar>
         <Title>Escolha a data</Title>
+        <OpenDatePickerButton onPress={handleToggleDatePicker}>
+          <OpenDatePickerButtonText>Selecionar outra data </OpenDatePickerButtonText>
+        </OpenDatePickerButton>
+        {showDatePicker && (<DateTimePicker
+          {...(Platform.OS === 'ios' && { textColor: '#f4ede8' })}
+          mode="date"
+          display={Platform.OS === 'android' ? 'calendar' : 'spinner'}
+          value={selectedDate}
+          onChange={handleDateChanged}
+        />)}
       </Calendar>
-      <OpenDatePickerButton onPress={handleToggleDatePicker}>
-        <OpenDatePickerButtonText>Selecionar outra data </OpenDatePickerButtonText>
-      </OpenDatePickerButton>
-      {showDatePicker && (<DateTimePicker
-        {...(Platform.OS === 'ios' && { textColor: '#f4ede8' })}
-        mode="date"
-        display={Platform.OS === 'android' ? 'calendar' : 'spinner'}
-        value={selectedDate}
-        onChange={handleDateChanged}
-      />)}
 
+      {morningAvailability.map(({ hourFormatted, available }) => (<Title key={hourFormatted}>{hourFormatted}</Title>))}
+
+      {afternoonAvailability.map(({ hourFormatted, available }) => (<Title key={hourFormatted}>{hourFormatted}</Title>))}
     </Container>
   )
 }
 
 export default CreateAppointment
+
