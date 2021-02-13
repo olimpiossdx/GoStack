@@ -15,14 +15,16 @@ import getValidationErros from '../../utils/getValidationErros';
 import { useAuth } from '../../hooks/auth';
 
 interface SignUpFormData {
-  user: string;
+  name: string;
   email: string;
+  old_password: string;
   password: string;
+  password_confirmation: string;
 };
 
 const SignUp = () => {
   const formRef = useRef<FormHandles>(null);
-  const { singIn, user } = useAuth();
+  const { singIn, user, updateUser } = useAuth();
   const emailInputRef = useRef<TextInput>(null);
   const oldPasswordInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
@@ -40,13 +42,47 @@ const SignUp = () => {
           email: Yup.string()
             .required('E-mail obrigatório')
             .email('Digite um e-mail válido.'),
-          password: Yup.string().required('Senha obrigatória.'),
+          old_password: Yup.string(),
+          password: Yup.string().when('old_password', {
+            is: (val: string) => !!val.length,
+            then: Yup.string().required('Campo obrigatório'),
+            otherwise: Yup.string(),
+          }),
+          password_confirmation: Yup.string()
+            .when('old_password', {
+              is: (val: string) => !!val.length,
+              then: Yup.string().required('Campo obrigatório'),
+              otherwise: Yup.string(),
+            })
+            .oneOf([Yup.ref('password'), null], 'Confirmação incorreta.'),
         });
+
         await schema.validate(data, { abortEarly: false });
 
-        await api.post('/users', data);
+        const {
+          name,
+          email,
+          old_password,
+          password,
+          password_confirmation,
+        } = data;
+        const formData = {
+          name,
+          email,
+          ...(data.old_password
+            ? {
+              old_password,
+              password,
+              password_confirmation,
+            }
+            : {}),
+        };
 
-        Alert.alert('Cadastro realizado com sucesso!', 'Você ja pode fazer seu login no GoBarber');
+        const response = await api.put('/profile', formData);
+
+        updateUser(response.data);
+
+        Alert.alert('Perfil atualizado com sucesso!');
 
         navigation.goBack();
 
@@ -57,10 +93,10 @@ const SignUp = () => {
           return;
         }
         if (error.response.data) {
-          Alert.alert('Erro no cadastro !', error.response.data.message); ''
+          Alert.alert('Erro na atualização do perfil !', error.response.data.message); ''
           return;
         }
-        Alert.alert('Erro no cadastro !', 'Ocorreu um erro ao fazer cadastro, tente novamente');
+        Alert.alert('Erro na atualização do perfil !', 'Ocorreu um erro ao atualizar seu perfil, tente novamente');
       }
     }, [navigation]);
 
@@ -88,7 +124,7 @@ const SignUp = () => {
           <View>
             <Title>Meu perfil</Title>
           </View>
-          <Form onSubmit={handleSignUP} ref={formRef} style={{ width: '100%' }}>
+          <Form initialData={user} onSubmit={handleSignUP} ref={formRef} style={{ width: '100%' }} >
 
             <Input
               autoCapitalize='words'
@@ -96,7 +132,7 @@ const SignUp = () => {
               icon='user'
               placeholder='Nome'
               onSubmitEditing={() => {
-                passwordInputRef.current?.focus();
+                emailInputRef.current?.focus();
               }}
             />
 
