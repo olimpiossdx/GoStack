@@ -9,7 +9,7 @@ import {
 } from './styles';
 import api from '../../services/api';
 
-export interface Provider {
+interface Provider {
   id: string;
   name: string;
   avatar_url: string;
@@ -17,7 +17,7 @@ export interface Provider {
 
 const DashBoard: React.FC = () => {
   const [providers, setproviders] = useState<Provider[]>([])
-  const { signOut, user } = useAuth();
+  const { user } = useAuth();
   const { navigate } = useNavigation();
 
   useEffect(() => {
@@ -28,7 +28,6 @@ const DashBoard: React.FC = () => {
 
   const navigateToProfile = useCallback(() => {
     navigate('Profile');
-    //signOut();
   }, [navigate]);
 
   const navigateToCreateAppointment = useCallback((providerId: string) => {
