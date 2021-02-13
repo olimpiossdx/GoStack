@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Feather';
 
+import Icon from 'react-native-vector-icons/Feather';
 import DateTimePicker, { AndroidEvent } from '@react-native-community/datetimepicker';
 
 import {
   Container, Header, BackButton, HeaderTitle, UserAvatar, Content,
   ProvidersListContainer, ProvidersList, ProviderContainer,
   ProviderAvatar, ProviderName, Calendar, Title, OpenDatePickerButton, OpenDatePickerButtonText,
-  Schedule, Section, SectionTitle, SectionContent, Hour, HourText
+  Schedule, Section, SectionTitle, SectionContent, Hour, HourText, CreateAppointmentButton, CreateAppointmentButtonText
 } from './styles';
 
 import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import { Platform } from 'react-native';
-import { date } from 'yup/lib/locale';
 import { format } from 'date-fns';
 
 interface RouteParms {
@@ -34,7 +34,7 @@ interface IAvailabiltyItem {
 const CreateAppointment = () => {
   const { user } = useAuth();
   const route = useRoute();
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
   const routeParams = route.params as RouteParms;
 
   const [availability, setAvailability] = useState<IAvailabiltyItem[]>([]);
@@ -43,7 +43,6 @@ const CreateAppointment = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedHour, setSelectedHour] = useState<number>(0);
-
 
   useEffect(() => {
     api.get('providers').then(response => {
@@ -105,9 +104,23 @@ const CreateAppointment = () => {
       }));
   }, [availability]);
 
-  const handleSelected = useCallback((hour: number) => {
+  const handleSelectHour = useCallback((hour: number) => {
     setSelectedHour(hour)
   }, []);
+
+  const handleCreateAppoitment = useCallback(async () => {
+    try {
+      const date = new Date(selectedDate);
+
+      date.setHours(selectedHour);
+      date.setMinutes(0);
+      await api.post('appointments', { provider_id: selectedProvider, date });
+
+      navigate('AppointmentCreated', { date: date.getTime() });
+    } catch (error) {
+      Alert.alert('Erro ao criar agendamento', 'Ocorreu um erro ao tentar criar o agendamento, tente novamente');
+    }
+  }, [navigate, selectedDate, selectedHour, selectedProvider]);
 
   return (
     <Container>
@@ -161,7 +174,7 @@ const CreateAppointment = () => {
                 selected={selectedHour === hour}
                 enabled={available}
                 available={available}
-                onPress={() => handleSelected(hour)}
+                onPress={() => handleSelectHour(hour)}
               >
                 <HourText selected={selectedHour === hour}>
                   {hourFormatted}
@@ -179,7 +192,7 @@ const CreateAppointment = () => {
                 selected={selectedHour === hour}
                 enabled={available}
                 available={available}
-                onPress={() => handleSelected(hour)}>
+                onPress={() => handleSelectHour(hour)}>
                 <HourText selected={selectedHour === hour}>
                   {hourFormatted}
                 </HourText>
@@ -187,6 +200,10 @@ const CreateAppointment = () => {
             </SectionContent>
           </Section>
         </Schedule>
+
+        <CreateAppointmentButton onPress={handleCreateAppoitment}>
+          <CreateAppointmentButtonText>Agendar</CreateAppointmentButtonText>
+        </CreateAppointmentButton>
       </Content>
     </Container>
   )
