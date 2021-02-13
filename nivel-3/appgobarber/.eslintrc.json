@@ -34,6 +34,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "@typescript-eslint/camelcase": "off",
+    "no-duplicate-imports":"off",
     "react/jsx-filename-extension": [
       1,
       {
