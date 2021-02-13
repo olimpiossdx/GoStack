@@ -31,6 +31,7 @@
     "nodemailer": "^6.4.17",
     "pg": "^8.5.1",
     "rate-limiter-flexible": "^2.2.1",
+    "react-native-image-picker": "^3.2.1",
     "redis": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.4.0",
