@@ -1,9 +1,9 @@
-import React, { FormEvent, useCallback, useRef } from 'react';
+import React, { FormEvent, useCallback, useRef, useState } from 'react';
 import { KeyboardAvoidingView, ScrollView, Platform, View, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { Container, Title, BackButton, UserAvatarButton, UserAvatar } from './styles';
-
+import ImagePicker from 'react-native-image-picker';
 import * as Yup from 'yup';
+
 import api from '../../services/api';
 
 import Input from '../../components/Input';
@@ -14,6 +14,8 @@ import { FormHandles, FormHelpers, FormProps, FormProvider } from '@unform/core'
 import getValidationErros from '../../utils/getValidationErros';
 import { useAuth } from '../../hooks/auth';
 
+import { Container, Title, BackButton, UserAvatarButton, UserAvatar } from './styles';
+
 interface SignUpFormData {
   name: string;
   email: string;
@@ -22,7 +24,7 @@ interface SignUpFormData {
   password_confirmation: string;
 };
 
-const SignUp = () => {
+const Profile = () => {
   const formRef = useRef<FormHandles>(null);
   const { singIn, user, updateUser } = useAuth();
   const emailInputRef = useRef<TextInput>(null);
@@ -30,7 +32,6 @@ const SignUp = () => {
   const passwordInputRef = useRef<TextInput>(null);
   const confirmPasswordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
-
 
   const handleSignUP = useCallback(
     async (data: SignUpFormData, _helpers: FormHelpers, _event?: FormEvent) => {
@@ -104,6 +105,36 @@ const SignUp = () => {
     navigation.goBack();
   }, [navigation]);
 
+  const handleUpdateAvatar = useCallback(() => {
+    ImagePicker.showImagePicker({
+      title: 'Selecione um avatar',
+      cancelButtonTitle: 'Cancelar',
+      takePhotoButtonTitle: 'Usar câmera',
+      chooseFromLibraryButtonTitle: 'Escolhe da galeria',
+    }, response => {
+      if (response.didCancel) {
+        return;
+
+      }
+      if (response.error) {
+        Alert.alert('Erro ao atualizar seu avatar');
+        return;
+      }
+
+      const data = new FormData();
+
+      data.append('avatar', {
+        type: 'image/jpeg',
+        name: `${user.id}.jpg`,
+        uri: response.uri
+      });
+
+      api.patch('users/avatar', data).then(apiResponse => {
+        updateUser(apiResponse.data);
+      });
+    })
+  }, [updateUser, user.id]);
+
   return (<>
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -117,7 +148,7 @@ const SignUp = () => {
             <Icon name='chevron-left' size={24} color='#999591' />
           </BackButton>
 
-          <UserAvatarButton>
+          <UserAvatarButton onPress={handleUpdateAvatar}>
             <UserAvatar source={{ uri: user.avatar_url }} />
           </UserAvatarButton>
 
@@ -195,5 +226,5 @@ const SignUp = () => {
   </>)
 }
 
-export default SignUp;
+export default Profile;
 
