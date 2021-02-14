@@ -43,7 +43,7 @@ const SignIn = () => {
         await schema.validate(data, { abortEarly: false });
 
         await signIn({ email: data.email, password: data.password });
-        history.push('/');
+        history.push('/dashboard');
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErros(error);
