@@ -33,7 +33,8 @@ jest.mock('../../hooks/toast', () => {
 describe('SignIn Page', () => {
   beforeEach(() => {
     mockedHistoryPush.mockClear();
-    mockedSignIn
+    mockedSignIn.mockClear();
+    mockedAddToast.mockClear();
   });
 
   it('should be albe to sign in', async () => {
