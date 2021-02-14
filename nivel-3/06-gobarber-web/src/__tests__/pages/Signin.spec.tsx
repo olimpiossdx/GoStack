@@ -14,6 +14,7 @@ jest.mock('react-router-dom', () => {
     Link: ({ children }: { children: React.ReactNode }) => children,
   };
 });
+
 jest.mock('../../hooks/auth', () => {
   return {
     useAuth: () => ({
