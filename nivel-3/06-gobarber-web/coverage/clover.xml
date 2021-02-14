@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1613313044565" clover="3.2.0">
-  <project timestamp="1613313044566" name="All files">
-    <metrics statements="229" coveredstatements="34" conditionals="51" coveredconditionals="7" methods="62" coveredmethods="7" elements="342" coveredelements="48" complexity="0" loc="229" ncloc="229" packages="12" files="13" classes="13"/>
+<coverage generated="1613313132966" clover="3.2.0">
+  <project timestamp="1613313132966" name="All files">
+    <metrics statements="229" coveredstatements="35" conditionals="51" coveredconditionals="7" methods="62" coveredmethods="8" elements="342" coveredelements="50" complexity="0" loc="229" ncloc="229" packages="12" files="13" classes="13"/>
     <package name="components.Button">
       <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
       <file name="index.tsx" path="/home/olimpiossdx/Documentos/projetos-exemplos/GoStack/nivel-3/06-gobarber-web/src/components/Button/index.tsx">
@@ -11,22 +11,22 @@
       </file>
     </package>
     <package name="components.Input">
-      <metrics statements="13" coveredstatements="12" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="3"/>
+      <metrics statements="13" coveredstatements="13" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="4"/>
       <file name="index.tsx" path="/home/olimpiossdx/Documentos/projetos-exemplos/GoStack/nivel-3/06-gobarber-web/src/components/Input/index.tsx">
-        <metrics statements="13" coveredstatements="12" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="3"/>
+        <metrics statements="13" coveredstatements="13" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="4"/>
         <line num="19" count="2" type="stmt"/>
-        <line num="25" count="17" type="stmt"/>
-        <line num="27" count="17" type="stmt"/>
-        <line num="28" count="17" type="stmt"/>
-        <line num="30" count="17" type="stmt"/>
-        <line num="32" count="17" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="36" count="17" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="39" count="1" type="stmt"/>
-        <line num="42" count="17" type="stmt"/>
-        <line num="43" count="9" type="stmt"/>
-        <line num="50" count="17" type="stmt"/>
+        <line num="25" count="20" type="stmt"/>
+        <line num="27" count="20" type="stmt"/>
+        <line num="28" count="20" type="stmt"/>
+        <line num="30" count="20" type="stmt"/>
+        <line num="32" count="20" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="36" count="20" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="42" count="20" type="stmt"/>
+        <line num="43" count="12" type="stmt"/>
+        <line num="50" count="20" type="stmt"/>
       </file>
     </package>
     <package name="components.ToastContainer">
