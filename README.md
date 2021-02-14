@@ -19,3 +19,7 @@
 </p>
 
 <img alt='' title='BootCamp' src='.github/bootcamp.png' />
+
+<img alt='Certificado Gostack' title='Certificado Gostack' src='.github/certificado-go-stack2021-02-14 15-25-47.png' />
+
+Link da lista dos desafios: https://github.com/rocketseat-education/bootcamp-gostack-desafios 
