@@ -1,5 +1,5 @@
 
-import { getMongoRepository, MongoRepository, Repository } from 'typeorm';
+import { getMongoRepository, MongoRepository } from 'typeorm';
 
 import INotificationRepository from '@modules/Notifications/repositories/INotificationRepository';
 import ICreateNotificationDTO from '@modules/Notifications/dtos/ICreateNotificationDTO';
