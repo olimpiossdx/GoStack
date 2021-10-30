@@ -1,8 +1,19 @@
-import React, { useRef, useEffect, useImperativeHandle, forwardRef, useState, useCallback } from 'react';
-import { NativeSyntheticEvent, TextInputChangeEventData, TextInputProps } from 'react-native';
+import React, {
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  useState,
+  useCallback,
+} from 'react';
+import {
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  TextInputProps,
+} from 'react-native';
 import { Container, TextInput, Icon } from './styles';
 
-import { } from '@unform/mobile';
+import {} from '@unform/mobile';
 import { useField } from '@unform/core';
 
 interface InputProps extends TextInputProps {
@@ -18,7 +29,10 @@ interface InputRef {
   focus(): void;
 }
 
-const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = ({ name, icon, containerStyle, ...rest }, ref) => {
+const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
+  { name, icon, containerStyle, ...rest },
+  ref,
+) => {
   const inputElementRef = useRef<any>(null);
 
   const { registerField, defaultValue = '', fieldName, error } = useField(name);
@@ -39,7 +53,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = ({ name, ico
   useImperativeHandle(ref, () => ({
     focus() {
       inputElementRef.current.focus();
-    }
+    },
   }));
 
   useEffect(() => {
@@ -57,26 +71,31 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = ({ name, ico
       },
     });
     return () => {
-      registerField
-    }
-  }, [fieldName, inputValueRef]);
+      registerField;
+    };
+  }, [fieldName, inputValueRef, registerField]);
 
   return (
     <Container style={containerStyle} isFocused={isFocused} isErrored={!!error}>
-      <Icon name={icon} size={20} color={isFocused || isFilled ? '#ff9000' : '#666360'} />
+      <Icon
+        name={icon}
+        size={20}
+        color={isFocused || isFilled ? '#ff9000' : '#666360'}
+      />
       <TextInput
         ref={inputElementRef}
-        keyboardAppearance='dark'
-        placeholderTextColor='#666360'
+        keyboardAppearance="dark"
+        placeholderTextColor="#666360"
         defaultValue={defaultValue}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         onChange={(event: NativeSyntheticEvent<TextInputChangeEventData>) => {
           inputValueRef.current.value = event.nativeEvent.text;
         }}
-        {...rest} />
+        {...rest}
+      />
     </Container>
-  )
-}
+  );
+};
 
 export default forwardRef(Input);
